@@ -16,7 +16,7 @@ class IncomeEntryActivity : AppCompatActivity() {
         setContentView(R.layout.activity_income_entry)
 
         viewModel = ViewModelProviders.of(this).get(IncomeEntryViewModel::class.java)
-        
+
         viewModel.incomeEntry(Income(Date(),50000,"First Income"))
     }
 }
