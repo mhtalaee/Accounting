@@ -23,6 +23,15 @@ class IncomeEntryModel {
 
     }
 
+
+    fun getSumIncomes(context: Context): Observable<Long> {
+
+        db = Room.databaseBuilder(context, AccountDatabase::class.java, "accountDB").build()
+
+        return db!!.accountDao().getSumIncomes()
+
+    }
+
     fun getIncomes(context: Context): Observable<List<Income>> {
 
         db = Room.databaseBuilder(context, AccountDatabase::class.java, "accountDB").build()

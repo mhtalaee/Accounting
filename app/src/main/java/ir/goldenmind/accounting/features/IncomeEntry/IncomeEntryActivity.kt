@@ -24,8 +24,12 @@ class IncomeEntryActivity : AppCompatActivity(), LifecycleOwner {
 
         viewModel.entryStatus.observe(this, Observer {
 
-            Toast.makeText(this@IncomeEntryActivity, "$it", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@IncomeEntryActivity, "New incomed added!", Toast.LENGTH_SHORT).show()
 
+        })
+
+        viewModel.sumIncomes.observe(this, Observer {
+            tvTotalIncome.text = it.toString()
         })
 
     }
@@ -35,6 +39,7 @@ class IncomeEntryActivity : AppCompatActivity(), LifecycleOwner {
         btnSaveIncome.setOnClickListener{
 
             viewModel.incomeEntry(this,Income(etDate.text.toString(), etAmount.text.toString().toLong(), etComment.text.toString()))
+            viewModel.getSumIncomes(this)
             viewModel.getIncomeList(this)
 
         }

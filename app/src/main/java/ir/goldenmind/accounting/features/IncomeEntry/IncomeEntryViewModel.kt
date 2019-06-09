@@ -13,6 +13,7 @@ import ir.goldenmind.accounting.pojo.Income
 class IncomeEntryViewModel : ViewModel() {
 
     val entryStatus = MutableLiveData<Boolean>()
+    val sumIncomes = MutableLiveData<Long>()
     lateinit var incomes : List<Income>
     val repository = IncomeEntryModel()
 
@@ -27,6 +28,20 @@ class IncomeEntryViewModel : ViewModel() {
                 { error -> Log.e(TAG, "Unable to insert income", error) }
             )
     }
+
+
+    fun getSumIncomes(context: Context) {
+
+        repository.getSumIncomes(context)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                sumIncomes.value = it
+            },
+                { error -> Log.e(TAG, "Unable to insert income", error) }
+            )
+    }
+
 
     fun getIncomeList(context: Context) {
         repository.getIncomes(context)
