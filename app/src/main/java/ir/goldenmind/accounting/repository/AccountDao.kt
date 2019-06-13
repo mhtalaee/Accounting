@@ -7,20 +7,25 @@ import androidx.room.Query
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
+import ir.goldenmind.accounting.pojo.Expense
 import ir.goldenmind.accounting.pojo.Income
 
 @Dao
 interface AccountDao {
 
-    @Query("SELECT * FROM income")
-    fun getAll(): Observable<List<Income>>
+
+    //Income DAO
+    @Insert
+    fun insertIncome(vararg incomes: Income?): Completable
 
     @Query("SELECT sum(amount) FROM income")
     fun getSumIncomes(): Observable<Long>
 
-    @Insert
-    fun insertAll(vararg incomes: Income?) : Completable
 
-    @Delete
-    fun delete(income: Income)
+    //Expense DAO
+    @Insert
+    fun insertExpense(expense: Expense): Completable
+
+    @Query("SELECT sum(amount) FROM expense")
+    fun getSumExpenses(): Observable<Long>
 }

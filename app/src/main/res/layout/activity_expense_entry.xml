@@ -4,13 +4,13 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context=".features.incomeentry.IncomeEntryActivity">
+              tools:context=".features.expenseentry.ExpenseEntryActivity">
 
     <TextView
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:gravity="center"
-            android:text="@string/add_income"
+            android:text="@string/add_expense"
             android:textColor="@color/black_font"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -31,13 +31,43 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="5dp"
                 android:gravity="center_vertical"
-                android:text="@string/total_income"
+                android:text="@string/total_expense"
                 android:textColor="@color/black_font"
                 android:textStyle="bold"
                 android:background="@android:color/holo_orange_light"/>
 
         <TextView
-                android:id="@+id/tvTotalIncome"
+                android:id="@+id/tvTotalExpense"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:textColor="@color/black_font"
+                android:textStyle="bold"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:background="@color/yellow_bg"
+            android:gravity="left|center"
+            android:orientation="horizontal" tools:ignore="RtlHardcoded">
+
+        <TextView
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:gravity="center_vertical"
+                android:text="@string/remained"
+                android:textColor="@color/black_font"
+                android:textStyle="bold"
+                android:background="@android:color/holo_orange_light"/>
+
+        <TextView
+                android:id="@+id/tvRemained"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -132,7 +162,7 @@
                 android:layout_width="220dp"
                 android:layout_height="40dp"
                 android:background="@drawable/item_background"
-                />
+        />
 
     </LinearLayout>
 
@@ -143,7 +173,7 @@
             android:orientation="horizontal">
 
         <Button
-                android:id="@+id/btnSaveIncome"
+                android:id="@+id/btnSaveExpense"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:text="@string/save"/>

@@ -1,4 +1,4 @@
-package ir.goldenmind.accounting.features.IncomeEntry
+package ir.goldenmind.accounting.features.incomeentry
 
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
@@ -14,10 +14,10 @@ class IncomeEntryViewModel : ViewModel() {
 
     val entryStatus = MutableLiveData<Boolean>()
     val sumIncomes = MutableLiveData<Long>()
-    lateinit var incomes : List<Income>
     val repository = IncomeEntryModel()
 
-    fun incomeEntry(context: Context, income: Income) {
+    @SuppressLint("CheckResult")
+    fun saveIncome(context: Context, income: Income) {
 
         repository.insertIncome(context, income)
             .subscribeOn(Schedulers.io())
@@ -30,6 +30,7 @@ class IncomeEntryViewModel : ViewModel() {
     }
 
 
+    @SuppressLint("CheckResult")
     fun getSumIncomes(context: Context) {
 
         repository.getSumIncomes(context)
@@ -42,14 +43,5 @@ class IncomeEntryViewModel : ViewModel() {
             )
     }
 
-
-    fun getIncomeList(context: Context) {
-        repository.getIncomes(context)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                incomes = it
-            })
-    }
 
 }
