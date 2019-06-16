@@ -30,28 +30,30 @@ class ExpenseEntryModel {
     }
 
     @SuppressLint("CheckResult")
-    fun getRemained(context: Context) : Long{
+    fun getRemained(context: Context): Observable<Long> {
 
-        var sumExpenses : Long = 0
-        var sumIncomes : Long = 0
+//        var sumExpenses: Long = 0
+//        var sumIncomes: Long = 0
+//
+//        db!!.accountDao().getSumExpenses()
+//            .subscribeOn(Schedulers.io())
+//            .subscribe {
+//                sumExpenses = it
+//            }
+//
+//        db!!.accountDao().getSumIncomes()
+//            .subscribeOn(Schedulers.io())
+//            .subscribe {
+//                sumIncomes = it
+//            }
 
-        db!!.accountDao().getSumExpenses()
-            .subscribeOn(Schedulers.io())
-            .subscribe(
-                {
-                    sumExpenses = it
-                }
+//        return sumIncomes - sumExpenses
+
+
+        return db!!.accountDao().getSumExpenses()
+            .mergeWith(
+                db!!.accountDao().getSumIncomes()
             )
-
-        db!!.accountDao().getSumIncomes()
-            .subscribeOn(Schedulers.io())
-            .subscribe(
-                {
-                    sumIncomes = it
-                }
-            )
-
-        return sumIncomes - sumExpenses
 
     }
 

@@ -28,9 +28,6 @@ class ExpenseEntryActivity : AppCompatActivity() {
     private fun init() {
         viewModel = ViewModelProviders.of(this).get(ExpenseEntryViewModel::class.java)
 
-
-
-
         viewModel.getSumExpenses(this)
 
         viewModel.sumExpenses.observe(this, Observer {
