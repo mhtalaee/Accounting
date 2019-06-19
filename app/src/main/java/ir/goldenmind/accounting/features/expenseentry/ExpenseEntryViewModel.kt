@@ -1,24 +1,25 @@
 package ir.goldenmind.accounting.features.expenseentry
 
+import android.app.Application
 import android.content.ContentValues
-import android.content.Context
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import ir.goldenmind.accounting.pojo.Expense
 
-class ExpenseEntryViewModel : ViewModel() {
+class ExpenseEntryViewModel(application: Application) : AndroidViewModel(application) {
 
     val entryStatus = MutableLiveData<Boolean>()
     val repository = ExpenseEntryModel()
     val sumExpenses = MutableLiveData<Long>()
     val remained = MutableLiveData<Long>()
     val composite = CompositeDisposable()
+    val context = getApplication<Application>().applicationContext
 
-    fun saveExpense(context: Context, expense: Expense) {
+    fun saveExpense(expense: Expense) {
 
         composite.add(
             repository.insertExpense(context, expense)
@@ -33,10 +34,11 @@ class ExpenseEntryViewModel : ViewModel() {
         )
     }
 
-    fun getSumExpenses(context: Context) {
+    fun getSumExpenses() {
         composite.add(repository.getSumExpenses(context)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+
             .subscribe(
                 {
                     sumExpenses.value = it
@@ -48,9 +50,9 @@ class ExpenseEntryViewModel : ViewModel() {
         )
     }
 
-    fun getRemained(context: Context) {
+    fun getRemained() {
 
-        var lastItem  = 0L
+        var lastItem = 0L
 
         composite.add(repository.getRemained(context)
             .subscribeOn(Schedulers.io())

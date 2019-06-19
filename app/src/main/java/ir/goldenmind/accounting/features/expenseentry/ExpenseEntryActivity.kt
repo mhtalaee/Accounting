@@ -28,16 +28,13 @@ class ExpenseEntryActivity : AppCompatActivity() {
     private fun init() {
         viewModel = ViewModelProviders.of(this).get(ExpenseEntryViewModel::class.java)
 
-        viewModel.getSumExpenses(this)
+        viewModel.getSumExpenses()
 
         viewModel.sumExpenses.observe(this, Observer {
             tvTotalExpense.text = it.toString()
         })
 
-
-
-
-        viewModel.getRemained(this)
+        viewModel.getRemained()
         viewModel.remained.observe(this, Observer {
             tvRemained.text = it.toString()
         })
@@ -83,12 +80,11 @@ class ExpenseEntryActivity : AppCompatActivity() {
         btnSaveExpense.setOnClickListener {
 
             viewModel.saveExpense(
-                this,
                 Expense(etDate.text.toString(), etAmount.text.toString().toLong(), etComment.text.toString())
             )
 
-            viewModel.getSumExpenses(this)
-            viewModel.getRemained(this)
+            viewModel.getSumExpenses()
+            viewModel.getRemained()
 
         }
 

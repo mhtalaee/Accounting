@@ -5,7 +5,7 @@ import androidx.room.Room
 import io.reactivex.Completable
 import io.reactivex.Observable
 import ir.goldenmind.accounting.pojo.Income
-import ir.goldenmind.accounting.repository.AccountDatabase
+import ir.goldenmind.accounting.repository.db.AccountDatabase
 
 class IncomeEntryModel {
 

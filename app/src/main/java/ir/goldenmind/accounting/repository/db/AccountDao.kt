@@ -1,4 +1,4 @@
-package ir.goldenmind.accounting.repository
+package ir.goldenmind.accounting.repository.db
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -28,4 +28,8 @@ interface AccountDao {
 
     @Query("SELECT sum(amount) FROM expense")
     fun getSumExpenses(): Observable<Long>
+
+    //Summary DAO
+    @Query("SELECT * FROM expense")
+    fun getSummaries() : Observable<Expense>
 }

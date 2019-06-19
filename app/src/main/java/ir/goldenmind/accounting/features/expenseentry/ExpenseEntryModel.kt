@@ -5,10 +5,8 @@ import android.content.Context
 import androidx.room.Room
 import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import ir.goldenmind.accounting.pojo.Expense
-import ir.goldenmind.accounting.repository.AccountDatabase
+import ir.goldenmind.accounting.repository.db.AccountDatabase
 
 class ExpenseEntryModel {
 
@@ -32,28 +30,10 @@ class ExpenseEntryModel {
     @SuppressLint("CheckResult")
     fun getRemained(context: Context): Observable<Long> {
 
-//        var sumExpenses: Long = 0
-//        var sumIncomes: Long = 0
-//
-//        db!!.accountDao().getSumExpenses()
-//            .subscribeOn(Schedulers.io())
-//            .subscribe {
-//                sumExpenses = it
-//            }
-//
-//        db!!.accountDao().getSumIncomes()
-//            .subscribeOn(Schedulers.io())
-//            .subscribe {
-//                sumIncomes = it
-//            }
+        val sumExpenses = db!!.accountDao().getSumExpenses()
+        val sumIncomes = db!!.accountDao().getSumIncomes()
 
-//        return sumIncomes - sumExpenses
-
-
-        return db!!.accountDao().getSumExpenses()
-            .mergeWith(
-                db!!.accountDao().getSumIncomes()
-            )
+        return Observable.concat(sumExpenses, sumIncomes)
 
     }
 

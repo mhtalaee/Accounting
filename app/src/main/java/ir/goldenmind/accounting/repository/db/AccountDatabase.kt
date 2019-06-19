@@ -1,4 +1,4 @@
-package ir.goldenmind.accounting.repository
+package ir.goldenmind.accounting.repository.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
