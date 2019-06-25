@@ -1,17 +1,18 @@
 package ir.goldenmind.accounting.features.summaryShow
 
+import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import io.reactivex.Observable
 import ir.goldenmind.accounting.pojo.Expense
 import ir.goldenmind.accounting.repository.db.AccountDatabase
 
-class SummaryModel() {
+class SummaryModel(application: Application) {
 
-    var db: AccountDatabase? = null
+    val db: AccountDatabase? = AccountDatabase.getDatabase(application)
 
-    fun getSummaryList(context: Context): Observable<Expense> {
-        db = Room.databaseBuilder(context, AccountDatabase::class.java, "accountDB").build()
+    fun getSummaryList(): Observable<List<Expense>> {
         return db!!.accountDao().getSummaries()
     }
+
 }

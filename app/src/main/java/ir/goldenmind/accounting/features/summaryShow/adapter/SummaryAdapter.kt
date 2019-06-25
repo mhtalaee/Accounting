@@ -8,7 +8,7 @@ import ir.goldenmind.accounting.R
 import ir.goldenmind.accounting.pojo.Expense
 import kotlinx.android.synthetic.main.summary_recycler_view_item.view.*
 
-class SummaryAdapter(val expenseList: ArrayList<Expense>) : RecyclerView.Adapter<SummaryAdapter.SummaryViewHoler>() {
+class SummaryAdapter(val expenseList: List<Expense>) : RecyclerView.Adapter<SummaryAdapter.SummaryViewHoler>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SummaryViewHoler {
 

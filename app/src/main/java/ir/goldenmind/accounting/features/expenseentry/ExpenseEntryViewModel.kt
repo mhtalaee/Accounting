@@ -13,7 +13,7 @@ import ir.goldenmind.accounting.pojo.Expense
 class ExpenseEntryViewModel(application: Application) : AndroidViewModel(application) {
 
     val entryStatus = MutableLiveData<Boolean>()
-    val repository = ExpenseEntryModel()
+    val repository = ExpenseEntryModel(application)
     val sumExpenses = MutableLiveData<Long>()
     val remained = MutableLiveData<Long>()
     val composite = CompositeDisposable()
@@ -22,51 +22,44 @@ class ExpenseEntryViewModel(application: Application) : AndroidViewModel(applica
     fun saveExpense(expense: Expense) {
 
         composite.add(
-            repository.insertExpense(context, expense)
+            repository.insertExpense(expense)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    entryStatus.value = true
-                },
-                    { error ->
-                        Log.e(ContentValues.TAG, "Unable to insert expense", error)
-                    })
+                .subscribe(
+                    {
+                        entryStatus.value = true
+                    },
+                    {
+                        Log.e(ContentValues.TAG, "Unable to insert expense", it)
+                    }
+                )
         )
+
     }
 
     fun getSumExpenses() {
-        composite.add(repository.getSumExpenses(context)
+
+        composite.add(
+            repository.getSumExpenses()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-
             .subscribe(
                 {
                     sumExpenses.value = it
+
+                    repository.getSumIncomes()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe {
+                            remained.value = it - sumExpenses.value!!
+                        }
+
                 },
-                { error ->
-                    Log.e(ContentValues.TAG, "Unable to insert income", error)
+                {
+                    Log.e(ContentValues.TAG, "Unable to insert expense", it)
                 }
             )
         )
-    }
-
-    fun getRemained() {
-
-        var lastItem = 0L
-
-        composite.add(repository.getRemained(context)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                remained.value = it - lastItem
-                lastItem = it
-
-            },
-                {
-                    Log.d("REMAINED_ERROR", it.message)
-                }
-
-            ))
     }
 
     override fun onCleared() {

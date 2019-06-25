@@ -3,7 +3,7 @@ package ir.goldenmind.accounting.features.expenseentry
 import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
+import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import ir.goldenmind.accounting.R
@@ -11,6 +11,8 @@ import ir.goldenmind.accounting.pojo.Expense
 import kotlinx.android.synthetic.main.activity_expense_entry.*
 import java.text.SimpleDateFormat
 import java.util.*
+
+
 
 class ExpenseEntryActivity : AppCompatActivity() {
 
@@ -21,29 +23,31 @@ class ExpenseEntryActivity : AppCompatActivity() {
         setContentView(R.layout.activity_expense_entry)
 
         init()
+        initCalendar()
         initButtons()
 
     }
 
     private fun init() {
-        viewModel = ViewModelProviders.of(this).get(ExpenseEntryViewModel::class.java)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = supportActionBar?.title.toString().plus(" > Expense")
 
-        viewModel.getSumExpenses()
+
+        viewModel = ViewModelProviders.of(this).get(ExpenseEntryViewModel::class.java)
 
         viewModel.sumExpenses.observe(this, Observer {
             tvTotalExpense.text = it.toString()
         })
 
-        viewModel.getRemained()
+        viewModel.getSumExpenses()
+
         viewModel.remained.observe(this, Observer {
             tvRemained.text = it.toString()
         })
 
+    }
 
-        viewModel.entryStatus.observe(this, Observer {
-            Toast.makeText(this, "New expense added!", Toast.LENGTH_SHORT).show()
-        })
-
+    private fun initCalendar() {
         val myCalendar = Calendar.getInstance()
 
         val date = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
@@ -55,7 +59,6 @@ class ExpenseEntryActivity : AppCompatActivity() {
 
         etDate.setOnClickListener {
 
-            // TODO Auto-generated method stub
             DatePickerDialog(
                 this,
                 date,
@@ -65,7 +68,19 @@ class ExpenseEntryActivity : AppCompatActivity() {
             ).show()
 
         }
+    }
 
+    private fun initButtons() {
+
+        btnSaveExpense.setOnClickListener {
+            viewModel.saveExpense(
+                Expense(
+                    etDate.text.toString(),
+                    etAmount.text.toString().toLong(),
+                    etComment.text.toString()
+                )
+            )
+        }
     }
 
     fun updateLabel(myCalendar: Calendar) {
@@ -75,18 +90,15 @@ class ExpenseEntryActivity : AppCompatActivity() {
 
     }
 
-    private fun initButtons() {
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
 
-        btnSaveExpense.setOnClickListener {
-
-            viewModel.saveExpense(
-                Expense(etDate.text.toString(), etAmount.text.toString().toLong(), etComment.text.toString())
-            )
-
-            viewModel.getSumExpenses()
-            viewModel.getRemained()
-
+        when (item?.itemId) {
+            android.R.id.home -> {
+                this.finish()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
         }
-
     }
+
 }

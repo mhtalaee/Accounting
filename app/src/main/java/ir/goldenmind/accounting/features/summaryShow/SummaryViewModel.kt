@@ -11,14 +11,14 @@ import ir.goldenmind.accounting.pojo.Expense
 
 class SummaryViewModel(application: Application) : AndroidViewModel(application) {
 
-    val repository = SummaryModel()
+    val repository = SummaryModel(application)
     val context = getApplication<Application>().applicationContext
     val composite = CompositeDisposable()
-    val expenseItem = MutableLiveData<Expense>()
+    val expenseItem = MutableLiveData<List<Expense>>()
 
     fun getSummaryList() {
 
-        composite.add(repository.getSummaryList(context)
+        composite.add(repository.getSummaryList()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(

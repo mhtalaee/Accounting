@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import io.reactivex.Completable
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import ir.goldenmind.accounting.pojo.Expense
@@ -31,5 +32,5 @@ interface AccountDao {
 
     //Summary DAO
     @Query("SELECT * FROM expense")
-    fun getSummaries() : Observable<Expense>
+    fun getSummaries() : Observable<List<Expense>>
 }

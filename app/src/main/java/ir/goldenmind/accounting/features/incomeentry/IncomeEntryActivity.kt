@@ -2,44 +2,50 @@ package ir.goldenmind.accounting.features.incomeentry
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import ir.goldenmind.accounting.pojo.Income
 import kotlinx.android.synthetic.main.activity_income_entry.*
 import java.util.*
 import android.app.DatePickerDialog
+import android.view.MenuItem
+import ir.goldenmind.accounting.R
 import java.text.SimpleDateFormat
 
-
-class IncomeEntryActivity : AppCompatActivity(), LifecycleOwner {
+class IncomeEntryActivity : AppCompatActivity() {
 
     lateinit var viewModel: IncomeEntryViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(ir.goldenmind.accounting.R.layout.activity_income_entry)
+        setContentView(R.layout.activity_income_entry)
 
         init()
+        initCalendar()
         initButtons()
 
     }
 
     private fun init() {
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = supportActionBar?.title.toString().plus(" > Income")
+
+
         viewModel = ViewModelProviders.of(this).get(IncomeEntryViewModel::class.java)
-
-        viewModel.getSumIncomes(this)
-
-        viewModel.entryStatus.observe(this, Observer {
-            Toast.makeText(this@IncomeEntryActivity, "New income added!", Toast.LENGTH_SHORT).show()
-        })
 
         viewModel.sumIncomes.observe(this, Observer {
             tvTotalIncome.text = it.toString()
         })
 
+        viewModel.getSumIncomes()
 
+        viewModel.remained.observe(this, Observer {
+            tvRemained.text = it.toString()
+        })
+
+    }
+
+    private fun initCalendar() {
         val myCalendar = Calendar.getInstance()
 
         val date = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
@@ -60,7 +66,19 @@ class IncomeEntryActivity : AppCompatActivity(), LifecycleOwner {
                 myCalendar.get(Calendar.MONTH),
                 myCalendar.get(Calendar.DAY_OF_MONTH)
             ).show()
+        }
+    }
 
+    private fun initButtons() {
+
+        btnSaveIncome.setOnClickListener {
+            viewModel.saveIncome(
+                Income(
+                    etDate.text.toString(),
+                    etAmount.text.toString().toLong(),
+                    etComment.text.toString()
+                )
+            )
         }
 
     }
@@ -72,17 +90,14 @@ class IncomeEntryActivity : AppCompatActivity(), LifecycleOwner {
 
     }
 
-    private fun initButtons() {
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
 
-        btnSaveIncome.setOnClickListener {
-
-            viewModel.saveIncome(
-                this,
-                Income(etDate.text.toString(), etAmount.text.toString().toLong(), etComment.text.toString())
-            )
-            viewModel.getSumIncomes(this)
-
+        when (item?.itemId) {
+            android.R.id.home -> {
+                this.finish()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
         }
-
     }
 }

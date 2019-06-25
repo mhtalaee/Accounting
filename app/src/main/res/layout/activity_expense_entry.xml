@@ -6,16 +6,6 @@
               android:orientation="vertical"
               tools:context=".features.expenseentry.ExpenseEntryActivity">
 
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center"
-            android:text="@string/add_expense"
-            android:textColor="@color/black_font"
-            android:textSize="20sp"
-            android:textStyle="bold"
-    />
-
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"

@@ -1,25 +1,27 @@
 package ir.goldenmind.accounting.features.incomeentry
 
-import android.annotation.SuppressLint
+import android.app.Application
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import ir.goldenmind.accounting.pojo.Income
 
-class IncomeEntryViewModel : ViewModel() {
+class IncomeEntryViewModel(application: Application) : AndroidViewModel(application) {
 
     val entryStatus = MutableLiveData<Boolean>()
     val sumIncomes = MutableLiveData<Long>()
-    val repository = IncomeEntryModel()
+    val repository = IncomeEntryModel(application)
+    val remained = MutableLiveData<Long>()
+    val composite = CompositeDisposable()
 
-    @SuppressLint("CheckResult")
-    fun saveIncome(context: Context, income: Income) {
+    fun saveIncome(income: Income) {
 
-        repository.insertIncome(context, income)
+        composite.add(repository.insertIncome(income)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
@@ -27,21 +29,29 @@ class IncomeEntryViewModel : ViewModel() {
             },
                 { error -> Log.e(TAG, "Unable to insert income", error) }
             )
+        )
     }
 
+    fun getSumIncomes() {
 
-    @SuppressLint("CheckResult")
-    fun getSumIncomes(context: Context) {
-
-        repository.getSumIncomes(context)
+        composite.add(repository.getSumIncomes()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 sumIncomes.value = it
-            },
-                { error -> Log.e(TAG, "Unable to insert income", error) }
-            )
-    }
 
+                repository.getSumExpenses()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe {
+                        remained.value = sumIncomes.value!! - it
+
+                    }
+
+            },
+                { Log.e(TAG, "Unable to insert income", it) }
+            )
+        )
+    }
 
 }

@@ -3,6 +3,8 @@ package ir.goldenmind.accounting.features.summaryShow
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.ActionMode
+import android.view.Gravity
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.lifecycle.Observer
@@ -11,10 +13,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ir.goldenmind.accounting.R
 import ir.goldenmind.accounting.features.expenseentry.ExpenseEntryActivity
+import ir.goldenmind.accounting.features.expenseentry.ExpenseEntryViewModel
 import ir.goldenmind.accounting.features.incomeentry.IncomeEntryActivity
 import ir.goldenmind.accounting.features.summaryShow.adapter.SummaryAdapter
 import ir.goldenmind.accounting.pojo.Expense
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -63,18 +67,17 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProviders.of(this).get(SummaryViewModel::class.java)
 
-        val list = arrayListOf<Expense>()
-//        list.add(Expense("2019/06/17",35000, "expense one"))
-//        list.add(Expense("2019/06/18",55000, "expense two"))
+        var list : List<Expense>? = null
 
         viewModel.expenseItem.observe(this, Observer {
-            list.add(it)
+            list = it
+            rvExpenseList.adapter = SummaryAdapter(list!!)
+            rvExpenseList.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+
         })
 
         viewModel.getSummaryList()
 
-        rvExpenseList.adapter = SummaryAdapter(list)
-        rvExpenseList.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
     }
 
@@ -85,6 +88,12 @@ class MainActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+    override fun onResume() {
+        drawer_layout.closeDrawers()
+        super.onResume()
+    }
+
 
 }
 

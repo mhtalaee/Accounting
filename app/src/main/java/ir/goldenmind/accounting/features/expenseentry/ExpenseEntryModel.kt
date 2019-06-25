@@ -1,40 +1,25 @@
 package ir.goldenmind.accounting.features.expenseentry
 
-import android.annotation.SuppressLint
-import android.content.Context
-import androidx.room.Room
+import android.app.Application
 import io.reactivex.Completable
 import io.reactivex.Observable
 import ir.goldenmind.accounting.pojo.Expense
 import ir.goldenmind.accounting.repository.db.AccountDatabase
 
-class ExpenseEntryModel {
+class ExpenseEntryModel(application: Application) {
 
-    var db: AccountDatabase? = null
+    val db: AccountDatabase? = AccountDatabase.getDatabase(application)
 
-    fun insertExpense(context: Context, expense: Expense): Completable {
-
-        db = Room.databaseBuilder(context, AccountDatabase::class.java, "accountDB").build()
-        return db!!.accountDao().insertExpense(expense)
-
-    }
-
-    fun getSumExpenses(context: Context): Observable<Long> {
-
-        db = Room.databaseBuilder(context, AccountDatabase::class.java, "accountDB").build()
-
+    fun getSumExpenses(): Observable<Long> {
         return db!!.accountDao().getSumExpenses()
-
     }
 
-    @SuppressLint("CheckResult")
-    fun getRemained(context: Context): Observable<Long> {
+    fun insertExpense(expense: Expense): Completable {
+        return db!!.accountDao().insertExpense(expense)
+    }
 
-        val sumExpenses = db!!.accountDao().getSumExpenses()
-        val sumIncomes = db!!.accountDao().getSumIncomes()
-
-        return Observable.concat(sumExpenses, sumIncomes)
-
+    fun getSumIncomes(): Observable<Long> {
+        return db!!.accountDao().getSumIncomes()
     }
 
 }
