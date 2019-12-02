@@ -35,7 +35,8 @@ class IncomeEntryActivity : AppCompatActivity() {
 
         viewModel.sumIncomes.observe(this, Observer {
             tvTotalIncome.text = it.toString()
-        })
+        }
+        )
 
         viewModel.getSumIncomes()
 
@@ -79,6 +80,7 @@ class IncomeEntryActivity : AppCompatActivity() {
                     etComment.text.toString()
                 )
             )
+            finish()
         }
 
     }

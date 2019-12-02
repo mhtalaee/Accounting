@@ -3,22 +3,21 @@ package ir.goldenmind.accounting.features.summaryShow
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.ActionMode
-import android.view.Gravity
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.fragment.app.FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ir.goldenmind.accounting.R
 import ir.goldenmind.accounting.features.expenseentry.ExpenseEntryActivity
-import ir.goldenmind.accounting.features.expenseentry.ExpenseEntryViewModel
 import ir.goldenmind.accounting.features.incomeentry.IncomeEntryActivity
-import ir.goldenmind.accounting.features.summaryShow.adapter.SummaryAdapter
+import ir.goldenmind.accounting.features.summaryShow.adapter.MainPagerAdapter
+import ir.goldenmind.accounting.features.summaryShow.adapter.ExpensesRecyclerAdapter
 import ir.goldenmind.accounting.pojo.Expense
 import kotlinx.android.synthetic.main.activity_main.*
-
+import kotlinx.android.synthetic.main.fragment_expense.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,7 +33,19 @@ class MainActivity : AppCompatActivity() {
 
         initButtons()
 
+        init()
+
         initRecyclerView()
+
+    }
+
+    private fun init() {
+
+        val mainPagerAdapter = MainPagerAdapter(supportFragmentManager,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
+
+        mainPager.adapter = mainPagerAdapter
+
+        smartTabLayout.setViewPager(mainPager)
 
     }
 
@@ -71,12 +82,12 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.expenseItem.observe(this, Observer {
             list = it
-            rvExpenseList.adapter = SummaryAdapter(list!!)
+            rvExpenseList.adapter = ExpensesRecyclerAdapter(list!!)
             rvExpenseList.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
 
         })
 
-        viewModel.getSummaryList()
+        viewModel.getExpenseList()
 
 
     }

@@ -19,6 +19,12 @@ class IncomeEntryViewModel(application: Application) : AndroidViewModel(applicat
     val remained = MutableLiveData<Long>()
     val composite = CompositeDisposable()
 
+    /* codes in init block runs whenever class is created
+    init{
+
+    }
+    */
+
     fun saveIncome(income: Income) {
 
         composite.add(repository.insertIncome(income)
@@ -52,6 +58,11 @@ class IncomeEntryViewModel(application: Application) : AndroidViewModel(applicat
                 { Log.e(TAG, "Unable to insert income", it) }
             )
         )
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        composite.clear()
     }
 
 }

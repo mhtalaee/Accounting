@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context=".features.summaryShow.fragments.IncomeFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+            android:id="@+id/frgSecond"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Second Fragment"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvIncomeList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+    </androidx.recyclerview.widget.RecyclerView>
+
+</FrameLayout>

@@ -19,6 +19,12 @@ class ExpenseEntryViewModel(application: Application) : AndroidViewModel(applica
     val composite = CompositeDisposable()
     val context = getApplication<Application>().applicationContext
 
+    /* codes in init block runs whenever class is created
+    init{
+
+    }
+    */
+
     fun saveExpense(expense: Expense) {
 
         composite.add(

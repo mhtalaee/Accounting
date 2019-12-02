@@ -6,14 +6,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ir.goldenmind.accounting.R
 import ir.goldenmind.accounting.pojo.Expense
-import kotlinx.android.synthetic.main.summary_recycler_view_item.view.*
+import kotlinx.android.synthetic.main.expense_recycler_view_item.view.*
 
-class SummaryAdapter(val expenseList: List<Expense>) : RecyclerView.Adapter<SummaryAdapter.SummaryViewHoler>() {
+class ExpensesRecyclerAdapter(val expenseList: List<Expense>) : RecyclerView.Adapter<ExpensesRecyclerAdapter.SummaryViewHoler>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SummaryViewHoler {
 
         val inflatedView =
-            LayoutInflater.from(parent.context).inflate(R.layout.summary_recycler_view_item, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.expense_recycler_view_item, parent, false)
         val viewHolder = SummaryViewHoler(inflatedView)
         return viewHolder
     }
@@ -27,8 +27,9 @@ class SummaryAdapter(val expenseList: List<Expense>) : RecyclerView.Adapter<Summ
     class SummaryViewHoler(val v: View) : RecyclerView.ViewHolder(v) {
 
         fun bindItems(expense: Expense) {
-            v.tvDate.text = expense.date.toString()
+            v.tvDate.text = expense.date
             v.tvAmount.text = expense.amount.toString()
+            v.tvComment.text = expense.comment
         }
 
     }

@@ -80,6 +80,7 @@ class ExpenseEntryActivity : AppCompatActivity() {
                     etComment.text.toString()
                 )
             )
+            finish()
         }
     }
 

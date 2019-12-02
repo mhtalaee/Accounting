@@ -8,6 +8,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import ir.goldenmind.accounting.pojo.Expense
+import ir.goldenmind.accounting.pojo.Income
 
 class SummaryViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -15,10 +16,11 @@ class SummaryViewModel(application: Application) : AndroidViewModel(application)
     val context = getApplication<Application>().applicationContext
     val composite = CompositeDisposable()
     val expenseItem = MutableLiveData<List<Expense>>()
+    val incomeItem = MutableLiveData<List<Income>>()
 
-    fun getSummaryList() {
+    fun getExpenseList() {
 
-        composite.add(repository.getSummaryList()
+        composite.add(repository.getExpenseList()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -30,6 +32,23 @@ class SummaryViewModel(application: Application) : AndroidViewModel(application)
         )
 
     }
+
+    fun getIncomeList() {
+
+        composite.add(repository.getIncomeList()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    incomeItem.value = it
+                },
+                { Log.d("SummaryViewModel:", it.message) }
+            )
+        )
+
+    }
+
+
 
     override fun onCleared() {
         super.onCleared()

@@ -31,6 +31,11 @@ interface AccountDao {
     fun getSumExpenses(): Observable<Long>
 
     //Summary DAO
-    @Query("SELECT * FROM expense")
-    fun getSummaries() : Observable<List<Expense>>
+    @Query("SELECT * FROM expense order by id desc")
+    fun getExpensesFromDB() : Observable<List<Expense>>
+
+    @Query("SELECT * FROM income order by id desc")
+    fun getIncomesFromDB() : Observable<List<Income>>
+
+
 }
