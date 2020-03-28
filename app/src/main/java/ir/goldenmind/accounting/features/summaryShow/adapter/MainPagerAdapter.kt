@@ -22,7 +22,7 @@ class MainPagerAdapter (fragmentManager: FragmentManager, behavior : Int): Fragm
 
     override fun getPageTitle(position: Int): CharSequence? {
         when (position) {
-            0 -> return "Expense LIst"
+            0 -> return "Expense List"
             1 -> return "Income List"
             else -> return "Expense LIst"
         }
